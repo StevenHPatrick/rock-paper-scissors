@@ -1,3 +1,13 @@
+const body = document.body;
+
+const rock = document.createElement("button");
+const paper = document.createElement("button");
+const scissors = document.createElement("button");
+const result = document.createElement("div");
+
+let humanScore = 0;
+let computerScore = 0;
+
 function getComputerChoice() {
   let ran_num = Math.random();
   if (ran_num < .33){
@@ -7,11 +17,6 @@ function getComputerChoice() {
   } else {
     return "paper";
   }
-}
-
-function getHumanChoice() {
-  let choice = prompt("Do you pick rock, paper, or scissors?");
-  return choice;
 }
 
 function checkChoices(human_choice, computer_choice){
@@ -29,25 +34,54 @@ function checkChoices(human_choice, computer_choice){
   console.log("Nothing matched");
 }
 
-let humanScore = 0;
-let computerScore = 0;
 
-function playRound(){
+function playRound(humanChoice){
 
-  for(let i = 0; i < 5; i++){
-    let human_choice = getHumanChoice();
-    let computer_choice = getComputerChoice();
-    let result = checkChoices(human_choice, computer_choice);
-    if (result == "computer"){
-      computerScore++;
-      console.log("Computer Won!");
-    } else if (result == "human"){
-      humanScore++;
-      console.log("You Won!");
-    }
+  let text = "";
+  let playerWon = false;
+
+  let human_choice = humanChoice.className;
+  let computer_choice = getComputerChoice();
+  let game_result = checkChoices(human_choice, computer_choice);
+  if (game_result == "computer"){
+    computerScore++;
+    console.log("Computer Won!");
+  } else if (game_result == "human"){
+    humanScore++;
+    console.log("You Won!");
+    playerWon = true;
   }
-  console.log(humanScore + " to " + computerScore);
   
+  console.log(humanScore + " to " + computerScore);
+
+  if ((humanScore == 5) || (computerScore == 5)){
+    if (playerWon){
+      result.textContent = "You WON!!! You pick " + human_choice + " and I picked " + computer_choice; 
+    } else {
+      result.textContent = "You LOSE! You pick " + human_choice + " and I picked " + computer_choice;       
+    }
+    
+  } else {
+    result.textContent = "Your score is: " + humanScore + " and you picked: " + human_choice + " while my score is: " + computerScore + " and I picked: "+ computer_choice;
+
+  }
 }
 
-playRound();
+
+rock.classList.add('rock');
+paper.classList.add('paper');
+scissors.classList.add('scissors');
+
+rock.addEventListener('click', () => playRound(rock));
+paper.addEventListener('click', () => playRound(paper));
+scissors.addEventListener('click', () => playRound(scissors));
+
+rock.textContent = "Rock";
+paper.textContent = "Paper";
+scissors.textContent = "Scissors";
+result.textContent = "Press a button to start";
+
+body.appendChild(rock);
+body.appendChild(paper);
+body.appendChild(scissors);
+body.appendChild(result);
